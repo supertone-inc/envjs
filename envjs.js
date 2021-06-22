@@ -25,9 +25,9 @@ function main() {
 
   const { argv, showHelp } = yargs(hideBin(process.argv))
     .locale("en")
-    .usage("Usage: $0 [options] -- <command>")
-    .example(`$0 -- npm install ${pkg.name} --save-dev`)
-    .example(`$0 -f env.json -- npm install ${pkg.name} --save-dev`)
+    .usage("Usage: $0 [options] -- '<command_to_execute>'")
+    .example(`$0 -f env.js -- 'node -e "console.log(process.env)"'`)
+    .example(`$0 -f env.js -- 'echo $ENV_VAR'`)
     .option("file", {
       alias: "f",
       default: "env.js",
