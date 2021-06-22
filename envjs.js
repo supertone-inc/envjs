@@ -24,6 +24,7 @@ function main() {
   const pkg = require("./package.json");
 
   const { argv, showHelp } = yargs(hideBin(process.argv))
+    .locale("en")
     .usage("Usage: $0 [options] -- <command>")
     .example(`$0 -- npm install ${pkg.name} --save-dev`)
     .example(`$0 -f env.json -- npm install ${pkg.name} --save-dev`)
