@@ -5,9 +5,13 @@
     "type": "git",
     "url": "git+https://github.com/supertone-inc/envjs.git"
   },
+  "bin": "index.js",
   "scripts": {
     "prepare": "husky install",
     "test": "jest"
+  },
+  "dependencies": {
+    "yargs": "^16.2.0"
   },
   "devDependencies": {
     "husky": "^6.0.0",
