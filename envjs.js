@@ -26,8 +26,8 @@ function main() {
   const { argv, showHelp } = yargs(hideBin(process.argv))
     .locale("en")
     .usage("Usage: $0 [options] -- '<command_to_execute>'")
-    .example(`$0 -f env.js -- 'node -e "console.log(process.env)"'`)
     .example(`$0 -f env.js -- 'echo $ENV_VAR'`)
+    .example(`$0 -f env.js -- 'node -e "console.log(process.env)"'`)
     .option("file", {
       alias: "f",
       default: "env.js",
