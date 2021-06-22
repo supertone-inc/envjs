@@ -12,9 +12,3 @@ test("sets env variables", () => {
   expect(process.env.ARRAY).toBe("1,1,true,false,,");
   expect(process.env.OBJECT).toBe("[object Object]");
 });
-
-test("returns converted env variables", () => {
-  const env = envjs(require("./env.sample.js"));
-
-  expect(process.env).toStrictEqual(expect.objectContaining(env));
-});
