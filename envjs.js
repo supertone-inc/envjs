@@ -26,14 +26,15 @@ function main() {
   const { argv, showHelp } = yargs(hideBin(process.argv))
     .usage("Usage: $0 [options] -- <command>")
     .example(`$0 -- npm install ${pkg.name} --save-dev`)
-    .example(`$0 -e env.json -- npm install ${pkg.name} --save-dev`)
-    .option("env-file", {
-      alias: "e",
+    .example(`$0 -f env.json -- npm install ${pkg.name} --save-dev`)
+    .option("file", {
+      alias: "f",
       default: "env.js",
-      description: "A file to load (*.js|*.json)",
+      normalize: true,
+      description: "JS or JSON file to load",
     });
 
-  const path = resolve(process.cwd(), argv.envFile);
+  const path = resolve(process.cwd(), argv.file);
 
   load(path);
 

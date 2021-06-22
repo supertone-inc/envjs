@@ -21,7 +21,7 @@ test("loads env variables", () => {
 });
 
 test("CLI runs without env file", () => {
-  const result = execSync("node envjs -e not-exists.js echo 'it works!'", {
+  const result = execSync("node envjs -f not-exists.js echo 'it works!'", {
     encoding: "utf8",
   });
 
@@ -42,12 +42,12 @@ assert.strictEqual(process.env.ARRAY, "1,1,true,false,,");\
 assert.strictEqual(process.env.OBJECT, "[object Object]");\
 `;
 
-  execSync(`node envjs -e ${ENV_FIILE} -- node -e '${JSON.stringify(script)}'`);
+  execSync(`node envjs -f ${ENV_FIILE} -- node -e '${JSON.stringify(script)}'`);
 });
 
 test("CLI substitutes env variables for command", () => {
   const command = `\
-node envjs -e ${ENV_FIILE} -- \
+node envjs -f ${ENV_FIILE} -- \
 '\
 echo $STRING;\
 echo $NUMBER;\
