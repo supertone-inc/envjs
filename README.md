@@ -14,16 +14,16 @@ npm install --save-dev @supertone/envjs
 ## Usage
 
 ```sh
-Usage: envjs [options] '<command_to_execute>'
+Usage: envjs [options] '<command>'
 
 Options:
-      --help     Show help                                             [boolean]
-      --version  Show version number                                   [boolean]
-  -f, --file     JS or JSON file to load            [string] [default: "env.js"]
+      --help     Show help                                         [boolean]
+      --version  Show version number                               [boolean]
+  -f, --file     Custom env file path          [string] [default: ".env.js"]
 
 Examples:
-  envjs -f env.js 'echo $ENV_VAR'
-  envjs -f env.js 'node -e "console.log(process.env.ENV_VAR)"'
+  envjs -f .env.js 'echo $ENV_VAR'
+  envjs -f .env.js 'node -e "console.log(process.env.ENV_VAR)"'
 ```
 
 For example in `package.json`:
@@ -32,7 +32,7 @@ For example in `package.json`:
 {
   "scripts": {
     "start": "envjs 'http-server -p $PORT'",
-    "build": "envjs -f env.production.js 'npm build'"
+    "build": "envjs -f .env.production.js 'npm build'"
   }
 }
 ```

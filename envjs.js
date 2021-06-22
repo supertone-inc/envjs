@@ -3,7 +3,7 @@
 const { existsSync } = require("fs");
 const { resolve } = require("path");
 
-function load(path = resolve(process.cwd(), "env.js")) {
+function load(path = resolve(process.cwd(), ".env.js")) {
   if (!existsSync(path)) {
     return;
   }
@@ -23,14 +23,14 @@ function main() {
 
   const { argv, showHelp } = yargs(hideBin(process.argv))
     .locale("en")
-    .usage("Usage: $0 [options] '<command_to_execute>'")
-    .example(`$0 -f env.js 'echo $ENV_VAR'`)
-    .example(`$0 -f env.js 'node -e "console.log(process.env)"'`)
+    .usage("Usage: $0 [options] '<command>'")
+    .example(`$0 -f .env.js 'echo $ENV_VAR'`)
+    .example(`$0 -f .env.js 'node -e "console.log(process.env.ENV_VAR)"'`)
     .option("file", {
       alias: "f",
-      default: "env.js",
+      default: ".env.js",
       normalize: true,
-      description: "JS or JSON file to load",
+      description: "Custom env file path",
     });
 
   const path = resolve(process.cwd(), argv.file);

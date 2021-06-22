@@ -19,8 +19,8 @@ test("loads env variables", () => {
 });
 
 test("overwrites existing env variables", () => {
-  envjs.load("./env.a.js");
-  envjs.load("./env.b.js");
+  envjs.load("./.env.a.js");
+  envjs.load("./.env.b.js");
 
   expect(process.env.A).toBe("a");
   expect(process.env.B).toBe("b");
@@ -93,8 +93,8 @@ assert.strictEqual(process.env.C, "c from b");\
 `;
 
   execSync(
-    `node envjs -f env.a.js ${JSON.stringify(
-      `node envjs -f env.b.js ${JSON.stringify(
+    `node envjs -f .env.a.js ${JSON.stringify(
+      `node envjs -f .env.b.js ${JSON.stringify(
         `node -e ${JSON.stringify(script)}`
       )}`
     )}`
