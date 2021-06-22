@@ -7,4 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-[unreleased]: https://github.com/supertone-inc/envjs/compare/main...HEAD
+## [0.1.0] - 2021-06-22
+
+### First Release :tada:
+
+[unreleased]: https://github.com/supertone-inc/envjs/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/supertone-inc/envjs/releases/tag/v0.1.0
