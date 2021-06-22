@@ -16,7 +16,7 @@ function main() {
 
   const pkg = require("./package.json");
 
-  const { argv } = yargs(hideBin(process.argv))
+  const { argv, showHelp } = yargs(hideBin(process.argv))
     .usage("$0 [options] -- <command>")
     .example(`$0 -- npm install ${pkg.name} --save-dev`)
     .example(`$0 -e env.json -- npm install ${pkg.name} --save-dev`)
@@ -35,6 +35,7 @@ function main() {
   const command = argv._.join(" ");
 
   if (!command) {
+    showHelp();
     return;
   }
 
