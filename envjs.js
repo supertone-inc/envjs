@@ -2,6 +2,9 @@
 
 const { existsSync } = require("fs");
 const { resolve } = require("path");
+const { name } = require("./package.json");
+
+const scriptName = name.split("/")[1];
 
 function load(path = resolve(process.cwd(), ".env.js")) {
   if (!existsSync(path)) {
@@ -22,6 +25,7 @@ function main() {
   const { hideBin } = require("yargs/helpers");
 
   const { argv, showHelp } = yargs(hideBin(process.argv))
+    .scriptName(scriptName)
     .locale("en")
     .usage("Usage: $0 [options] '<command>'")
     .example(`$0 -f .env.js 'echo $ENV_VAR'`)
@@ -50,5 +54,8 @@ function main() {
 if (require.main === module) {
   main();
 } else {
-  module.exports.load = load;
+  module.exports = {
+    scriptName,
+    load,
+  };
 }

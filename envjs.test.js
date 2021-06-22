@@ -1,12 +1,12 @@
 const { execSync } = require("child_process");
-const envjs = require("./envjs");
+const { scriptName, load } = require("./envjs");
 
 test("runs without env file", () => {
-  envjs.load("not-exists.js");
+  load("not-exists.js");
 });
 
 test("loads env variables", () => {
-  envjs.load();
+  load();
 
   expect(process.env.STRING).toBe("1");
   expect(process.env.NUMBER).toBe("1");
@@ -19,8 +19,8 @@ test("loads env variables", () => {
 });
 
 test("overwrites existing env variables", () => {
-  envjs.load("./.env.a.js");
-  envjs.load("./.env.b.js");
+  load("./.env.a.js");
+  load("./.env.b.js");
 
   expect(process.env.A).toBe("a");
   expect(process.env.B).toBe("b");
@@ -28,9 +28,12 @@ test("overwrites existing env variables", () => {
 });
 
 test("CLI runs without env file", () => {
-  const result = execSync("node envjs -f not-exists.js echo 'it works!'", {
-    encoding: "utf8",
-  });
+  const result = execSync(
+    `node ${scriptName} -f not-exists.js echo 'it works!'`,
+    {
+      encoding: "utf8",
+    }
+  );
 
   expect(result).toBe("it works!\n");
 });
@@ -49,12 +52,14 @@ assert.strictEqual(process.env.ARRAY, "1,1,true,false,,");\
 assert.strictEqual(process.env.OBJECT, "[object Object]");\
 `;
 
-  execSync(`node envjs ${JSON.stringify(`node -e ${JSON.stringify(script)}`)}`);
+  execSync(
+    `node ${scriptName} ${JSON.stringify(`node -e ${JSON.stringify(script)}`)}`
+  );
 });
 
 test("CLI substitutes env variables for command", () => {
   const command = `\
-node envjs \
+node ${scriptName} \
 '\
 echo $STRING;\
 echo $NUMBER;\
@@ -93,8 +98,8 @@ assert.strictEqual(process.env.C, "c from b");\
 `;
 
   execSync(
-    `node envjs -f .env.a.js ${JSON.stringify(
-      `node envjs -f .env.b.js ${JSON.stringify(
+    `node ${scriptName} -f .env.a.js ${JSON.stringify(
+      `node ${scriptName} -f .env.b.js ${JSON.stringify(
         `node -e ${JSON.stringify(script)}`
       )}`
     )}`
