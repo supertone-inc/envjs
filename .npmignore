@@ -1,1 +1,4 @@
+.github
 .husky
+env.*
+*.test.js
