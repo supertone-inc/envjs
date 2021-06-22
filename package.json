@@ -1,0 +1,8 @@
+{
+  "name": "@supertone/envjs",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/supertone-inc/envjs.git"
+  }
+}
