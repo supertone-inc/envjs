@@ -20,7 +20,7 @@ Options:
 
 Examples:
   envjs -f env.js 'echo $ENV_VAR'
-  envjs -f env.js 'node -e "console.log(process.env)"'
+  envjs -f env.js 'node -e "console.log(process.env.ENV_VAR)"'
 ```
 
 For example in `package.json`:
@@ -28,9 +28,8 @@ For example in `package.json`:
 ```json
 {
   "scripts": {
-    "start-a": "envjs 'http-server -p $PORT_A'",
-    "start-b": "envjs 'http-server -p $PORT_B'",
-    "build-production": "envjs -f env.production.js 'npm build'"
+    "start": "envjs 'http-server -p $PORT'",
+    "build": "envjs -f env.production.js 'npm build'"
   }
 }
 ```
