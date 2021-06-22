@@ -1,5 +1,8 @@
 # @supertone/envjs
 
+[![npm (scoped)](https://img.shields.io/npm/v/@supertone/envjs)](https://www.npmjs.com/package/@supertone/envjs)
+[![Test](https://github.com/supertone-inc/envjs/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/supertone-inc/envjs/actions/workflows/test.yml)
+
 Loads environment variables from `.js` or `.json` files.
 
 ## Installation
