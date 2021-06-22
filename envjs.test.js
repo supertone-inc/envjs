@@ -1,5 +1,5 @@
 const { execSync } = require("child_process");
-const envjs = require(".");
+const envjs = require("./envjs");
 
 const ENV_FIILE = "env.sample.js";
 
@@ -21,7 +21,7 @@ test("loads env variables", () => {
 });
 
 test("CLI runs without env file", () => {
-  const result = execSync("./index.js -e not-exists.js echo 'it works!'", {
+  const result = execSync("node envjs -e not-exists.js echo 'it works!'", {
     encoding: "utf8",
   });
 
@@ -42,12 +42,12 @@ assert.strictEqual(process.env.ARRAY, "1,1,true,false,,");\
 assert.strictEqual(process.env.OBJECT, "[object Object]");\
 `;
 
-  execSync(`./index.js -e ${ENV_FIILE} -- node -e '${JSON.stringify(script)}'`);
+  execSync(`node envjs -e ${ENV_FIILE} -- node -e '${JSON.stringify(script)}'`);
 });
 
 test("CLI substitutes env variables for command", () => {
   const command = `\
-./index.js -e ${ENV_FIILE} -- \
+node envjs -e ${ENV_FIILE} -- \
 '\
 echo $STRING;\
 echo $NUMBER;\

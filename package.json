@@ -5,8 +5,9 @@
     "type": "git",
     "url": "git+https://github.com/supertone-inc/envjs.git"
   },
+  "main": "envjs.js",
   "bin": {
-    "envjs": "index.js"
+    "envjs": "envjs.js"
   },
   "scripts": {
     "prepare": "husky install",
