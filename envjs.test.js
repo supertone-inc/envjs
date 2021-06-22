@@ -1,14 +1,12 @@
 const { execSync } = require("child_process");
 const envjs = require("./envjs");
 
-const ENV_FIILE = "env.sample.js";
-
 test("runs without env file", () => {
   envjs.load("not-exists.js");
 });
 
 test("loads env variables", () => {
-  envjs.load(`./${ENV_FIILE}`);
+  envjs.load();
 
   expect(process.env.STRING).toBe("1");
   expect(process.env.NUMBER).toBe("1");
@@ -18,6 +16,15 @@ test("loads env variables", () => {
   expect(process.env.UNDEFINED).toBe("undefined");
   expect(process.env.ARRAY).toBe("1,1,true,false,,");
   expect(process.env.OBJECT).toBe("[object Object]");
+});
+
+test("overwrites existing env variables", () => {
+  envjs.load("./env.a.js");
+  envjs.load("./env.b.js");
+
+  expect(process.env.A).toBe("a");
+  expect(process.env.B).toBe("b");
+  expect(process.env.C).toBe("c from b");
 });
 
 test("CLI runs without env file", () => {
@@ -42,12 +49,12 @@ assert.strictEqual(process.env.ARRAY, "1,1,true,false,,");\
 assert.strictEqual(process.env.OBJECT, "[object Object]");\
 `;
 
-  execSync(`node envjs -f ${ENV_FIILE} -- node -e '${JSON.stringify(script)}'`);
+  execSync(`node envjs -- node -e ${JSON.stringify(JSON.stringify(script))}`);
 });
 
 test("CLI substitutes env variables for command", () => {
   const command = `\
-node envjs -f ${ENV_FIILE} -- \
+node envjs -- \
 '\
 echo $STRING;\
 echo $NUMBER;\
@@ -75,4 +82,22 @@ undefined\n\
 ";
 
   expect(result).toBe(expected);
+});
+
+test("CLI preserves most inner values", () => {
+  const script = `\
+const assert = require("assert");\
+\
+assert.strictEqual(process.env.A, "a");\
+assert.strictEqual(process.env.B, "b");\
+assert.strictEqual(process.env.C, "c from b");\
+`;
+
+  execSync(
+    `node envjs -f env.a.js -- ${JSON.stringify(
+      `node envjs -f env.b.js -- node -e ${JSON.stringify(
+        JSON.stringify(script)
+      )}`
+    )}`
+  );
 });
