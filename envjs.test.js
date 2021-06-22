@@ -49,12 +49,12 @@ assert.strictEqual(process.env.ARRAY, "1,1,true,false,,");\
 assert.strictEqual(process.env.OBJECT, "[object Object]");\
 `;
 
-  execSync(`node envjs -- node -e ${JSON.stringify(JSON.stringify(script))}`);
+  execSync(`node envjs ${JSON.stringify(`node -e ${JSON.stringify(script)}`)}`);
 });
 
 test("CLI substitutes env variables for command", () => {
   const command = `\
-node envjs -- \
+node envjs \
 '\
 echo $STRING;\
 echo $NUMBER;\
@@ -69,8 +69,7 @@ echo $OBJECT;\
 
   const result = execSync(command, { encoding: "utf8" });
 
-  const expected =
-    "\
+  const expected = `\
 1\n\
 1\n\
 true\n\
@@ -79,7 +78,7 @@ null\n\
 undefined\n\
 1,1,true,false,,\n\
 [object Object]\n\
-";
+`;
 
   expect(result).toBe(expected);
 });
@@ -94,9 +93,9 @@ assert.strictEqual(process.env.C, "c from b");\
 `;
 
   execSync(
-    `node envjs -f env.a.js -- ${JSON.stringify(
-      `node envjs -f env.b.js -- node -e ${JSON.stringify(
-        JSON.stringify(script)
+    `node envjs -f env.a.js ${JSON.stringify(
+      `node envjs -f env.b.js ${JSON.stringify(
+        `node -e ${JSON.stringify(script)}`
       )}`
     )}`
   );

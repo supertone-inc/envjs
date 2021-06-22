@@ -21,13 +21,11 @@ function main() {
   const yargs = require("yargs/yargs");
   const { hideBin } = require("yargs/helpers");
 
-  const pkg = require("./package.json");
-
   const { argv, showHelp } = yargs(hideBin(process.argv))
     .locale("en")
-    .usage("Usage: $0 [options] -- '<command_to_execute>'")
-    .example(`$0 -f env.js -- 'echo $ENV_VAR'`)
-    .example(`$0 -f env.js -- 'node -e "console.log(process.env)"'`)
+    .usage("Usage: $0 [options] '<command_to_execute>'")
+    .example(`$0 -f env.js 'echo $ENV_VAR'`)
+    .example(`$0 -f env.js 'node -e "console.log(process.env)"'`)
     .option("file", {
       alias: "f",
       default: "env.js",
