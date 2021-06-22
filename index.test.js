@@ -1,8 +1,14 @@
 const { execSync } = require("child_process");
-const setEnv = require(".");
+const envjs = require(".");
 
-test("The function sets env variables", () => {
-  setEnv(require("./env.sample.js"));
+const ENV_FIILE = "env.sample.js";
+
+test("runs without env file", () => {
+  envjs.load("not-exists.js");
+});
+
+test("loads env variables", () => {
+  envjs.load(`./${ENV_FIILE}`);
 
   expect(process.env.STRING).toBe("1");
   expect(process.env.NUMBER).toBe("1");
@@ -36,15 +42,12 @@ assert.strictEqual(process.env.ARRAY, "1,1,true,false,,");\
 assert.strictEqual(process.env.OBJECT, "[object Object]");\
 `;
 
-  execSync(
-    `./index.js -e env.sample.js -- node -e '${JSON.stringify(script)}'`
-  );
+  execSync(`./index.js -e ${ENV_FIILE} -- node -e '${JSON.stringify(script)}'`);
 });
 
 test("CLI substitutes env variables for command", () => {
-  const command =
-    "\
-./index.js -e env.sample.js -- \
+  const command = `\
+./index.js -e ${ENV_FIILE} -- \
 '\
 echo $STRING;\
 echo $NUMBER;\
@@ -55,7 +58,7 @@ echo $UNDEFINED;\
 echo $ARRAY;\
 echo $OBJECT;\
 '\
-";
+`;
 
   const result = execSync(command, { encoding: "utf8" });
 

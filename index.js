@@ -1,6 +1,15 @@
 #!/usr/bin/env node
 
-function setEnv(env) {
+const { existsSync } = require("fs");
+const { resolve } = require("path");
+
+function load(path = resolve(process.cwd(), "env.js")) {
+  if (!existsSync(path)) {
+    return;
+  }
+
+  const env = require(path);
+
   for (const [key, value] of Object.entries(env)) {
     process.env[key] = value;
   }
@@ -8,8 +17,6 @@ function setEnv(env) {
 
 function main() {
   const { execSync } = require("child_process");
-  const { existsSync } = require("fs");
-  const path = require("path");
 
   const yargs = require("yargs/yargs");
   const { hideBin } = require("yargs/helpers");
@@ -17,7 +24,7 @@ function main() {
   const pkg = require("./package.json");
 
   const { argv, showHelp } = yargs(hideBin(process.argv))
-    .usage("$0 [options] -- <command>")
+    .usage("Usage: $0 [options] -- <command>")
     .example(`$0 -- npm install ${pkg.name} --save-dev`)
     .example(`$0 -e env.json -- npm install ${pkg.name} --save-dev`)
     .option("env-file", {
@@ -26,11 +33,9 @@ function main() {
       description: "A file to load (*.js|*.json)",
     });
 
-  const envFilePath = path.resolve(process.cwd(), argv.envFile);
+  const path = resolve(process.cwd(), argv.envFile);
 
-  if (existsSync(envFilePath)) {
-    setEnv(require(envFilePath));
-  }
+  load(path);
 
   const command = argv._.join(" ");
 
@@ -45,5 +50,5 @@ function main() {
 if (require.main === module) {
   main();
 } else {
-  module.exports = setEnv;
+  module.exports.load = load;
 }
