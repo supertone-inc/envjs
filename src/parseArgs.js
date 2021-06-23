@@ -34,13 +34,3 @@ Examples:
 }
 
 module.exports = parseArgs;
-
-if (require.main === module) {
-  const result = parseArgs();
-  console.log({
-    rawArgs: result.rawArgs,
-    opts: result.opts(),
-    args: result.args,
-    commands: result.commands,
-  });
-}
