@@ -3,13 +3,16 @@ const { execSync } = require("child_process");
 const script = `node src/index`;
 
 function createTestCommand(testScript) {
-  return `node -e '${JSON.stringify(`\
-    const assert = require("assert"); ${testScript}\
-  `)}'`;
+  return `node -e ${JSON.stringify(
+    JSON.stringify(`\
+      const assert = require("assert");\
+      ${testScript}\
+  `)
+  )}`;
 }
 
 it("runs without env file", () => {
-  const result = execSync(`${script} -f not-exists.js echo 'it works!'`, {
+  const result = execSync(`${script} -f not-exists.js echo it works!`, {
     encoding: "utf8",
   });
 
