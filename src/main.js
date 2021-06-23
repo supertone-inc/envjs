@@ -17,7 +17,7 @@ function main() {
   const env = { ...process.env, ...parseEnvFile(envFilePath) };
   const command = replaceEnvVars(program.args.join(" "), env);
 
-  return execSync(command, { env, stdio: "inherit" });
+  execSync(command, { env, stdio: "inherit" });
 }
 
 if (require.main === module) {
