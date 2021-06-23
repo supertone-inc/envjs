@@ -2,6 +2,7 @@
 
 [![npm (scoped)](https://img.shields.io/npm/v/@supertone/envjs)](https://www.npmjs.com/package/@supertone/envjs)
 [![Test](https://github.com/supertone-inc/envjs/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/supertone-inc/envjs/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/supertone-inc/envjs/branch/main/graph/badge.svg?token=WR97D6K6RG)](https://codecov.io/gh/supertone-inc/envjs)
 
 Executes commands using an environment from a `.js` file.
 
