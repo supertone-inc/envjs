@@ -12,9 +12,9 @@ it("runs without env file", () => {
 
 it("sets env variables", () => {
   const jsScript = `\
-const assert = require("assert");\
-assert.strictEqual(process.env.ENV_NAME, ".env.js");\
-`;
+    const assert = require("assert");\
+    assert.strictEqual(process.env.ENV_NAME, ".env.js");\
+  `;
 
   execSync(
     `${script} ${JSON.stringify(`node -e ${JSON.stringify(jsScript)}`)}`
@@ -29,9 +29,9 @@ it("substitutes env variables for command", () => {
 
 it("overwrites existing values", () => {
   const jsScript = `\
-const assert = require("assert");\
-assert.strictEqual(process.env.ENV_NAME, ".env.json");\
-`;
+    const assert = require("assert");\
+    assert.strictEqual(process.env.ENV_NAME, ".env.json");\
+  `;
 
   execSync(
     `${script} ${JSON.stringify(
