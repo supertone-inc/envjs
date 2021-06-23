@@ -49,6 +49,9 @@ jobs:
           node-version: 14
           registry-url: "https://registry.npmjs.org"
 
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
