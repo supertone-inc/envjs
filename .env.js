@@ -1,1 +1,1 @@
-exports.ENV_NAME = ".env.js";
+exports.ENV_VAR = ".env.js";

@@ -1,26 +1,35 @@
-const { execSync } = require("child_process");
+const parseArgs = require("./parseArgs");
 
 const script = "node src/parseArgs";
 
-function getArgv(command) {
-  const result = execSync(command, { encoding: "utf8" });
-
-  try {
-    return JSON.parse(result);
-  } catch (error) {
-    console.debug(result);
-
-    throw error;
+it("parses options correctly", () => {
+  function parseOptions(command) {
+    return parseArgs(command.split(" ")).opts();
   }
-}
 
-it("parses arguments", () => {
-  const argv = getArgv(`${script} -f .env.json 'echo $ENV_NAME'`);
-
-  expect(argv).toEqual({
-    _: ["echo $ENV_NAME"],
-    f: ".env.json",
-    file: ".env.json",
-    $0: "envjs",
+  expect(parseOptions(`${script}`)).toEqual({
+    file: ".env.js",
   });
+
+  expect(parseOptions(`${script} -f .env1.js`)).toEqual({
+    file: ".env1.js",
+  });
+
+  expect(parseOptions(`${script} -f .env1.js -f .env2.js`)).toEqual({
+    file: ".env2.js",
+  });
+});
+
+it("parses arguments correctly", () => {
+  function parseArguments(command) {
+    return parseArgs(command.split(" ")).args;
+  }
+
+  expect(parseArguments(`${script} echo $ENV_VAR \$ENV_VAR -f file`)).toEqual([
+    "echo",
+    "$ENV_VAR",
+    "$ENV_VAR",
+    "-f",
+    "file",
+  ]);
 });

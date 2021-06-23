@@ -13,7 +13,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "yargs": "^16.2.0"
+    "commander": "^7.2.0"
   },
   "devDependencies": {
     "husky": "^6.0.0",

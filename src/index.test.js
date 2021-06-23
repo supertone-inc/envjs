@@ -1,9 +1,18 @@
 const { execSync } = require("child_process");
 
-const script = `node src/index.js`;
+const script = `node src/index`;
+
+function createTestCommand(testScript) {
+  return `node -e ${JSON.stringify(
+    JSON.stringify(`\
+      const assert = require("assert");\
+      ${testScript}\
+  `)
+  )}`;
+}
 
 it("runs without env file", () => {
-  const result = execSync(`${script} -f not-exists.js echo 'it works!'`, {
+  const result = execSync(`${script} -f not-exists.js echo it works!`, {
     encoding: "utf8",
   });
 
@@ -11,33 +20,31 @@ it("runs without env file", () => {
 });
 
 it("sets env variables", () => {
-  const jsScript = `\
-const assert = require("assert");\
-assert.strictEqual(process.env.ENV_NAME, ".env.js");\
-`;
-
-  execSync(
-    `${script} ${JSON.stringify(`node -e ${JSON.stringify(jsScript)}`)}`
+  const testCommand = createTestCommand(
+    `assert.strictEqual(process.env.ENV_VAR, ".env.js");`
   );
+
+  execSync(`${script} ${testCommand}`);
 });
 
 it("substitutes env variables for command", () => {
-  const result = execSync(`${script} 'echo $ENV_NAME'`, { encoding: "utf8" });
+  const result = execSync(`${script} echo \\$ENV_VAR`, {
+    encoding: "utf8",
+  });
 
   expect(result.trim()).toBe(".env.js");
 });
 
 it("overwrites existing values", () => {
-  const jsScript = `\
-const assert = require("assert");\
-assert.strictEqual(process.env.ENV_NAME, ".env.json");\
-`;
+  const outerCommand = (command) =>
+    `${script} -f .env.js ${JSON.stringify(command)}`;
 
-  execSync(
-    `${script} ${JSON.stringify(
-      `${script} -f .env.json ${JSON.stringify(
-        `node -e ${JSON.stringify(jsScript)}`
-      )}`
-    )}`
+  const innerCommand = (command) =>
+    `${script} -f .env.json ${JSON.stringify(command)}`;
+
+  const testCommand = createTestCommand(
+    `assert.strictEqual(process.env.ENV_VAR, ".env.json");`
   );
+
+  execSync(outerCommand(innerCommand(testCommand)));
 });
