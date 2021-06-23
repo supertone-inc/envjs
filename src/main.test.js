@@ -1,6 +1,6 @@
 const { execSync } = require("child_process");
 
-const script = `node src/index`;
+const script = `node src/main`;
 
 function createTestCommand(testScript) {
   return `node -e ${JSON.stringify(
