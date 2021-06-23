@@ -16,8 +16,8 @@ module.exports = function parseArgs(argv, options) {
       "after",
       `
 Examples:
-  ${name} -f .env.js node -e "'console.log(process.env.ENV_VAR)'"
-  ${name} -f .env.js echo \\$ENV_VAR
+  ${name} node -e "'console.log(process.env.ENV_VAR)'"
+  ${name} echo \\$ENV_VAR
 `
     )
     .passThroughOptions()

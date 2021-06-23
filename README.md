@@ -24,8 +24,8 @@ Options:
   -h, --help         display help
 
 Examples:
-  envjs -f .env.js node -e "'console.log(process.env.ENV_VAR)'"
-  envjs -f .env.js echo \$ENV_VAR
+  envjs node -e "'console.log(process.env.ENV_VAR)'"
+  envjs echo \$ENV_VAR
 ```
 
 For example in `package.json`:
