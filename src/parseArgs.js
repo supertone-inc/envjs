@@ -21,14 +21,5 @@ Examples:
 `
     )
     .passThroughOptions()
-    .exitOverride((error) => {
-      switch (error.code) {
-        case "commander.help":
-        case "commander.helpDisplayed":
-          return;
-        default:
-          throw error;
-      }
-    })
     .parse(argv, options);
 };
