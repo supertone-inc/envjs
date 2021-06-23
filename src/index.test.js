@@ -1,6 +1,6 @@
 const { execSync } = require("child_process");
 
-const script = "node envjs";
+const script = `node src/index.js`;
 
 it("runs without env file", () => {
   const result = execSync(`${script} -f not-exists.js echo 'it works!'`, {
