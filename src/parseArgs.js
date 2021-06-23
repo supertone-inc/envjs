@@ -3,7 +3,7 @@ const pkg = require("../package.json");
 
 const name = pkg.name.split("/")[1];
 
-function parseArgs(argv, options) {
+module.exports = function parseArgs(argv, options) {
   return new Command()
     .name(name)
     .arguments("<command>")
@@ -31,6 +31,4 @@ Examples:
       }
     })
     .parse(argv, options);
-}
-
-module.exports = parseArgs;
+};

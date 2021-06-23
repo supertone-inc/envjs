@@ -10,7 +10,7 @@ function mapValues(obj, convert) {
   return result;
 }
 
-module.exports = function (path) {
+module.exports = function parseEnvFile(path) {
   if (!existsSync(path)) {
     return {};
   }
