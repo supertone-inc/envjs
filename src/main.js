@@ -14,13 +14,10 @@ function main() {
   }
 
   const envFilePath = resolve(program.opts().file);
-  const env = parseEnvFile(envFilePath);
+  const env = { ...process.env, ...parseEnvFile(envFilePath) };
   const command = replaceEnvVars(program.args.join(" "), env);
 
-  return execSync(command, {
-    env: { ...process.env, ...env },
-    stdio: "inherit",
-  });
+  return execSync(command, { env, stdio: "inherit" });
 }
 
 if (require.main === module) {
