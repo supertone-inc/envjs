@@ -1,4 +1,4 @@
 .github
 .husky
 .env*
-*.test.js
+*.test.*

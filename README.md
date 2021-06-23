@@ -3,7 +3,7 @@
 [![npm (scoped)](https://img.shields.io/npm/v/@supertone/envjs)](https://www.npmjs.com/package/@supertone/envjs)
 [![Test](https://github.com/supertone-inc/envjs/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/supertone-inc/envjs/actions/workflows/test.yml)
 
-Loads environment variables from `.js` or `.json` files.
+Executes commands using an environment from a `.js` file.
 
 ## Installation
 
@@ -14,16 +14,18 @@ npm install --save-dev @supertone/envjs
 ## Usage
 
 ```sh
-Usage: envjs [options] '<command>'
+Usage: envjs [options] <command>
+
+Arguments:
+  command            a command to run with env variables
 
 Options:
-      --help     Show help                                         [boolean]
-      --version  Show version number                               [boolean]
-  -f, --file     Custom env file path          [string] [default: ".env.js"]
+  -f, --file <path>  env file path (default: ".env.js")
+  -h, --help         display help
 
 Examples:
-  envjs -f .env.js 'echo $ENV_VAR'
-  envjs -f .env.js 'node -e "console.log(process.env.ENV_VAR)"'
+  envjs -f .env.js node -e "'console.log(process.env.ENV_VAR)'"
+  envjs -f .env.js echo \$ENV_VAR
 ```
 
 For example in `package.json`:
@@ -31,8 +33,8 @@ For example in `package.json`:
 ```json
 {
   "scripts": {
-    "start": "envjs 'http-server -p $PORT'",
-    "build": "envjs -f .env.production.js 'npm build'"
+    "test": "envjs -f .env.test.js jest",
+    "start": "envjs -f .env.dev.js http-server -p \\$PORT"
   }
 }
 ```

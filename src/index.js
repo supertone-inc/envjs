@@ -5,15 +5,15 @@ const parseArgs = require("./parseArgs");
 const parseEnvFile = require("./parseEnvFile");
 
 function main() {
-  const { argv, showHelp } = parseArgs(process.argv);
-  const command = argv._.join(" ");
+  const program = parseArgs();
+  const command = program.args.join(" ");
 
   if (!command) {
-    showHelp();
+    program.help();
     return;
   }
 
-  const envFilePath = resolve(argv.file);
+  const envFilePath = resolve(program.opts().file);
   const env = parseEnvFile(envFilePath);
 
   return execSync(command, {
