@@ -28,6 +28,66 @@ it("parses --file option correctly", () => {
   });
 });
 
+it("parses --env option correctly", () => {
+  function parseOptions(command) {
+    return parseArgs(command.split(" ")).opts();
+  }
+
+  const defaultOptions = { file: ".env.js" };
+
+  expect(parseOptions(`${script} -e ENV_VAR0=env-var0`)).toEqual({
+    ...defaultOptions,
+    env: ["ENV_VAR0=env-var0"],
+  });
+
+  expect(
+    parseOptions(`${script} -e ENV_VAR0=env-var0 ENV_VAR1=env-var1`)
+  ).toEqual({
+    ...defaultOptions,
+    env: ["ENV_VAR0=env-var0", "ENV_VAR1=env-var1"],
+  });
+
+  expect(
+    parseOptions(`${script} -e ENV_VAR0=env-var0 -e ENV_VAR1=env-var1`)
+  ).toEqual({
+    ...defaultOptions,
+    env: ["ENV_VAR0=env-var0", "ENV_VAR1=env-var1"],
+  });
+
+  expect(
+    parseOptions(`${script} -e ENV_VAR0=env-var0 -e ENV_VAR0=env-var1`)
+  ).toEqual({
+    ...defaultOptions,
+    env: ["ENV_VAR0=env-var0", "ENV_VAR0=env-var1"],
+  });
+
+  expect(parseOptions(`${script} --env ENV_VAR0=env-var0`)).toEqual({
+    ...defaultOptions,
+    env: ["ENV_VAR0=env-var0"],
+  });
+
+  expect(
+    parseOptions(`${script} --env ENV_VAR0=env-var0 ENV_VAR1=env-var1`)
+  ).toEqual({
+    ...defaultOptions,
+    env: ["ENV_VAR0=env-var0", "ENV_VAR1=env-var1"],
+  });
+
+  expect(
+    parseOptions(`${script} --env ENV_VAR0=env-var0 --env ENV_VAR1=env-var1`)
+  ).toEqual({
+    ...defaultOptions,
+    env: ["ENV_VAR0=env-var0", "ENV_VAR1=env-var1"],
+  });
+
+  expect(
+    parseOptions(`${script} --env ENV_VAR0=env-var0 --env ENV_VAR0=env-var1`)
+  ).toEqual({
+    ...defaultOptions,
+    env: ["ENV_VAR0=env-var0", "ENV_VAR0=env-var1"],
+  });
+});
+
 it("parses arguments correctly", () => {
   function parseArguments(command) {
     return parseArgs(command.split(" ")).args;

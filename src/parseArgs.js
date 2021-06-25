@@ -8,9 +8,10 @@ module.exports = function parseArgs(argv, options) {
     .name(name)
     .arguments("<command>")
     .description("", {
-      command: "a command to run with env variables",
+      command: "command to run with env variables",
     })
     .option("-f, --file <path>", "env file path", ".env.js")
+    .option("-e, --env <key=value...>", "additional env key pairs")
     .helpOption("-h, --help", "display help")
     .addHelpText(
       "after",
