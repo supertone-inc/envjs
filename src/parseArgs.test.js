@@ -35,7 +35,7 @@ it("parses --env option correctly", () => {
 
   expect(parseOptions(`envjs -e ENV_VAR0=env-var0 -- <command>`)).toEqual(
     expect.objectContaining({
-      env: ["ENV_VAR0=env-var0"],
+      env: { ENV_VAR0: "env-var0" },
     })
   );
 
@@ -43,7 +43,7 @@ it("parses --env option correctly", () => {
     parseOptions(`envjs -e ENV_VAR0=env-var0 ENV_VAR1=env-var1 -- <command>`)
   ).toEqual(
     expect.objectContaining({
-      env: ["ENV_VAR0=env-var0", "ENV_VAR1=env-var1"],
+      env: { ENV_VAR0: "env-var0", ENV_VAR1: "env-var1" },
     })
   );
 
@@ -51,7 +51,7 @@ it("parses --env option correctly", () => {
     parseOptions(`envjs -e ENV_VAR0=env-var0 ENV_VAR0=env-var1 -- <command>`)
   ).toEqual(
     expect.objectContaining({
-      env: ["ENV_VAR0=env-var0", "ENV_VAR0=env-var1"],
+      env: { ENV_VAR0: "env-var0", ENV_VAR0: "env-var1" },
     })
   );
 
@@ -59,7 +59,7 @@ it("parses --env option correctly", () => {
     parseOptions(`envjs -e ENV_VAR0=env-var0 -e ENV_VAR1=env-var1 -- <command>`)
   ).toEqual(
     expect.objectContaining({
-      env: ["ENV_VAR0=env-var0", "ENV_VAR1=env-var1"],
+      env: { ENV_VAR0: "env-var0", ENV_VAR1: "env-var1" },
     })
   );
 
@@ -67,7 +67,7 @@ it("parses --env option correctly", () => {
     parseOptions(`envjs -e ENV_VAR0=env-var0 -e ENV_VAR0=env-var1 -- <command>`)
   ).toEqual(
     expect.objectContaining({
-      env: ["ENV_VAR0=env-var0", "ENV_VAR0=env-var1"],
+      env: { ENV_VAR0: "env-var0", ENV_VAR0: "env-var1" },
     })
   );
 });
