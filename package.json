@@ -9,6 +9,7 @@
     "envjs": "index.js"
   },
   "scripts": {
+    "postversion": "git push && git push origin v$npm_package_version",
     "prepare": "is-ci || husky install",
     "test": "jest"
   },
