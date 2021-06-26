@@ -4,7 +4,7 @@ const script = "node src/parseArgs";
 
 it("parses --file option correctly", () => {
   function parseOptions(command) {
-    return parseArgs(command.split(" ")).opts();
+    return parseArgs(`${command} dummy-argument`.split(" ")).opts();
   }
 
   expect(parseOptions(`${script}`)).toEqual({
