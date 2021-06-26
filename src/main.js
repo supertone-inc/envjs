@@ -1,19 +1,17 @@
 const { execSync } = require("child_process");
 const { resolve } = require("path");
 
-const { createArgParser } = require("./parseArgs");
+const parseArgs = require("./parseArgs");
 const parseEnvFile = require("./parseEnvFile");
 const replaceEnvVars = require("./replaceEnvVars");
 
 function main() {
-  const program = createArgParser();
-
   if (process.argv.length === 2) {
-    program.help();
+    parseArgs.parser.help();
     return;
   }
 
-  program.parse();
+  const program = parseArgs();
 
   const envFilePath = resolve(program.opts().file);
   const env = { ...process.env, ...parseEnvFile(envFilePath) };
