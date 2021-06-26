@@ -18,15 +18,24 @@ npm install --save-dev @supertone/envjs
 Usage: envjs [options] <command>
 
 Arguments:
-  command            a command to run with env variables
+  command                   command to run with env variables
 
 Options:
-  -f, --file <path>  env file path (default: ".env.js")
-  -h, --help         display help
+  -f, --file <path>         env file path (default: ".env.js")
+  -e, --env <key=value...>  additional env key-value pairs
+  -h, --help                display help
+
+Note:
+  - You must escape "$" with "\$" for using env variables in command line.
+  - If you use variadic options(e.g. -e, --env) directly before <command>,
+    insert "--" between [option] and <command> to distinguish them.
 
 Examples:
-  envjs node -e "'console.log(process.env.ENV_VAR)'"
   envjs echo \$ENV_VAR
+  envjs -f .env.json echo \$ENV_VAR
+  envjs -e ENV_VAR=value -- echo \$ENV_VAR
+  envjs -f .env.json -e ENV_VAR=value -- echo \$ENV_VAR
+  envjs -e ENV_VAR=value -f .env.json echo \$ENV_VAR
 ```
 
 For example in `package.json`:
@@ -35,7 +44,8 @@ For example in `package.json`:
 {
   "scripts": {
     "test": "envjs -f .env.test.js jest",
-    "start": "envjs -f .env.dev.js http-server -p \\$PORT"
+    "start": "envjs -f .env.dev.js http-server -p \\$PORT",
+    "build": "envjs -e NODE_ENV=production -- webpack"
   }
 }
 ```

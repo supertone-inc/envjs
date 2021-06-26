@@ -20,31 +20,48 @@ it("runs without env file", () => {
 });
 
 it("sets env variables", () => {
-  const testCommand = createTestCommand(
-    `assert.strictEqual(process.env.ENV_VAR, ".env.js");`
+  execSync(
+    `${script} ${createTestCommand(
+      `assert.strictEqual(process.env.ENV_VAR, ".env.js");`
+    )}`
   );
 
-  execSync(`${script} ${testCommand}`);
+  execSync(
+    `${script} -e ENV_VAR=.env.json -- ${createTestCommand(
+      `assert.strictEqual(process.env.ENV_VAR, ".env.json");`
+    )}`
+  );
 });
 
 it("substitutes env variables for command", () => {
-  const result = execSync(`${script} echo \\$ENV_VAR`, {
-    encoding: "utf8",
-  });
+  expect(
+    execSync(`${script} echo \\$ENV_VAR`, {
+      encoding: "utf8",
+    }).trim()
+  ).toBe(".env.js");
 
-  expect(result.trim()).toBe(".env.js");
+  expect(
+    execSync(`${script} -e ENV_VAR=.env.json -- echo \\$ENV_VAR`, {
+      encoding: "utf8",
+    }).trim()
+  ).toBe(".env.json");
 });
 
 it("overwrites existing values", () => {
   const outerCommand = (command) =>
-    `${script} -f .env.js ${JSON.stringify(command)}`;
+    `${script} -f .env.js -e ENV_VAR_INLINE=.env.inline.js -- ${JSON.stringify(
+      command
+    )}`;
 
   const innerCommand = (command) =>
-    `${script} -f .env.json ${JSON.stringify(command)}`;
+    `${script} -f .env.json -e ENV_VAR_INLINE=.env.inline.json -- ${JSON.stringify(
+      command
+    )}`;
 
-  const testCommand = createTestCommand(
-    `assert.strictEqual(process.env.ENV_VAR, ".env.json");`
-  );
+  const testCommand = createTestCommand(`\
+    assert.strictEqual(process.env.ENV_VAR_INLINE, ".env.json");\
+    assert.strictEqual(process.env.ENV_VAR_INLINE, ".env.inline.json");\
+  `);
 
   execSync(outerCommand(innerCommand(testCommand)));
 });

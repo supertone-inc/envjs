@@ -1,4 +1,10 @@
-const parseArgs = require("./parseArgs");
+const { createArgParser } = require("./parseArgs");
+
+function parseArgs(...args) {
+  return createArgParser()
+    .exitOverride()
+    .parse(...args);
+}
 
 function createArgv(command) {
   return `argv[0] ${command}`.split(" ");
@@ -20,6 +26,50 @@ it("parses --file option correctly", () => {
   expect(parseOptions(`envjs -f .env1.js -f .env2.js <command>`)).toEqual({
     file: ".env2.js",
   });
+});
+
+it("parses --env option correctly", () => {
+  function parseOptions(command) {
+    return parseArgs(createArgv(command)).opts();
+  }
+
+  expect(parseOptions(`envjs -e ENV_VAR0=env-var0 -- <command>`)).toEqual(
+    expect.objectContaining({
+      env: { ENV_VAR0: "env-var0" },
+    })
+  );
+
+  expect(
+    parseOptions(`envjs -e ENV_VAR0=env-var0 ENV_VAR1=env-var1 -- <command>`)
+  ).toEqual(
+    expect.objectContaining({
+      env: { ENV_VAR0: "env-var0", ENV_VAR1: "env-var1" },
+    })
+  );
+
+  expect(
+    parseOptions(`envjs -e ENV_VAR0=env-var0 ENV_VAR0=env-var1 -- <command>`)
+  ).toEqual(
+    expect.objectContaining({
+      env: { ENV_VAR0: "env-var0", ENV_VAR0: "env-var1" },
+    })
+  );
+
+  expect(
+    parseOptions(`envjs -e ENV_VAR0=env-var0 -e ENV_VAR1=env-var1 -- <command>`)
+  ).toEqual(
+    expect.objectContaining({
+      env: { ENV_VAR0: "env-var0", ENV_VAR1: "env-var1" },
+    })
+  );
+
+  expect(
+    parseOptions(`envjs -e ENV_VAR0=env-var0 -e ENV_VAR0=env-var1 -- <command>`)
+  ).toEqual(
+    expect.objectContaining({
+      env: { ENV_VAR0: "env-var0", ENV_VAR0: "env-var1" },
+    })
+  );
 });
 
 it("parses arguments correctly", () => {

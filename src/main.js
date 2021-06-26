@@ -1,20 +1,23 @@
 const { execSync } = require("child_process");
 const { resolve } = require("path");
 
-const parseArgs = require("./parseArgs");
+const { createArgParser } = require("./parseArgs");
 const parseEnvFile = require("./parseEnvFile");
 const replaceEnvVars = require("./replaceEnvVars");
 
 function main() {
+  const argParser = createArgParser();
+
   if (process.argv.length === 2) {
-    parseArgs.parser.help();
+    argParser.help();
     return;
   }
 
-  const program = parseArgs();
+  const program = argParser.parse();
 
-  const envFilePath = resolve(program.opts().file);
-  const env = { ...process.env, ...parseEnvFile(envFilePath) };
+  const options = program.opts();
+  const envFilePath = resolve(options.file);
+  const env = { ...process.env, ...parseEnvFile(envFilePath), ...options.env };
   const command = replaceEnvVars(program.args.join(" "), env);
 
   execSync(command, { env, stdio: "inherit" });

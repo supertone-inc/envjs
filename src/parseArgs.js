@@ -3,20 +3,44 @@ const pkg = require("../package.json");
 
 const name = pkg.name.split("/")[1];
 
-const parser = new Command()
-  .name(name)
-  .argument("<command>", "a command to run with env variables")
-  .option("-f, --file <path>", "env file path", ".env.js")
-  .helpOption("-h, --help", "display help")
-  .addHelpText(
-    "after",
-    `
-Examples:
-  ${name} node -e "'console.log(process.env.ENV_VAR)'"
-  ${name} echo \\$ENV_VAR
-`
-  )
-  .passThroughOptions();
+function convertEnvOption(value, previous) {
+  const [envKey, envValue] = value.split("=").map((string) => string.trim());
 
-module.exports = (...args) => parser.parse(...args);
-module.exports.parser = parser;
+  return {
+    ...previous,
+    [envKey]: envValue,
+  };
+}
+
+function createArgParser() {
+  return new Command()
+    .name(name)
+    .argument("<command>", "command to run with env variables")
+    .option("-f, --file <path>", "env file path", ".env.js")
+    .option(
+      "-e, --env <key=value...>",
+      "additional env key-value pairs",
+      convertEnvOption
+    )
+    .helpOption("-h, --help", "display help")
+    .addHelpText(
+      "after",
+      `
+Note:
+  - You must escape "$" with "\\$" for using env variables in command line.
+  - If you use variadic options(e.g. -e, --env) directly before <command>,
+    insert "--" between [option] and <command> to distinguish them.
+
+Examples:
+  ${name} echo \\$ENV_VAR
+  ${name} -f .env.json echo \\$ENV_VAR
+  ${name} -e ENV_VAR=value -- echo \\$ENV_VAR
+  ${name} -f .env.json -e ENV_VAR=value -- echo \\$ENV_VAR
+  ${name} -e ENV_VAR=value -f .env.json echo \\$ENV_VAR
+`
+    )
+    .passThroughOptions();
+}
+
+module.exports = (...args) => createArgParser().parse(...args);
+module.exports.createArgParser = createArgParser;
