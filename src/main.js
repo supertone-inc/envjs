@@ -15,8 +15,9 @@ function main() {
 
   const program = argParser.parse();
 
-  const envFilePath = resolve(program.opts().file);
-  const env = { ...process.env, ...parseEnvFile(envFilePath) };
+  const options = program.opts();
+  const envFilePath = resolve(options.file);
+  const env = { ...process.env, ...parseEnvFile(envFilePath), ...options.env };
   const command = replaceEnvVars(program.args.join(" "), env);
 
   execSync(command, { env, stdio: "inherit" });
