@@ -58,10 +58,11 @@ it("overwrites existing values", () => {
       command
     )}`;
 
-  const testCommand = createTestCommand(`\
-    assert.strictEqual(process.env.ENV_VAR_INLINE, ".env.json");\
-    assert.strictEqual(process.env.ENV_VAR_INLINE, ".env.inline.json");\
-  `);
+  const testCommand = `node -e ${JSON.stringify(`\
+      const assert = require("assert");\
+      assert.strictEqual(process.env.ENV_VAR, ".env.json");\
+      assert.strictEqual(process.env.ENV_VAR_INLINE, ".env.inline.json");\
+  `)}`;
 
   execSync(outerCommand(innerCommand(testCommand)));
 });
